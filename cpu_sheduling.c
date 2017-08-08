@@ -1,7 +1,7 @@
 #include<stdlib.h>
 #include<stdio.h>
 
-typedef struct proc{
+typedef struct proces{
         int pid;
         int priority;
         int burst;
@@ -9,8 +9,8 @@ typedef struct proc{
         int waiting;
         int turnaround;
 
-        struct proc* next;
-        struct proc* prev;
+        struct proces* next;
+        struct proces* prev;
         } proc;
 
 void displayProc(proc* HEAD){
@@ -49,13 +49,6 @@ void displayFCFS(proc* HEAD){
     }   
 }
 
-void displayPriority(proc* HEAD, int n){
-}
-
-void displaySJN(proc* HEAD){
-    
-}
-
 proc* duplicateList(proc* HEAD){
     proc* temp = HEAD->next;
     proc* newproc;
@@ -79,8 +72,73 @@ proc* duplicateList(proc* HEAD){
             HEAD2->prev = newproc;
             newproc->next = HEAD2;
             newproc->prev = HEAD2;
+        }else{
+            HEAD2->next->prev = newproc;
+            newproc->next = HEAD2->next;
+            HEAD2->next = newproc;
+            newproc->prev = HEAD2;
         }
+
+        temp=temp->next;
     }
+
+    return HEAD2;
+}
+
+void displaySJN(proc* HEAD){
+    proc* HEAD2 = duplicateList(HEAD);
+    proc* HEAD3 = malloc(sizeof(proc));
+    HEAD3->next = NULL;
+    HEAD3->prev = NULL;
+    HEAD3->pid = -1;
+
+    proc* temp = HEAD2->next;
+    proc* least = HEAD2->next;
+
+    proc* newproc;
+
+    while(HEAD2->next != HEAD2){
+        printf("\nInside While Loop in displaySJN()");
+        while(temp->pid > 0){
+            if(temp->burst < least->burst){
+                least = temp;
+            }
+            temp = temp->next;
+        }
+        //ADDING TO HEAD3
+        newproc = malloc(sizeof(proc));
+        newproc->pid = least->pid;
+        newproc->burst = least->burst;
+        newproc->priority = least->priority;
+
+        if(HEAD3->next == NULL){
+            HEAD3->next = newproc;
+            HEAD3->prev = newproc;
+            newproc->next = HEAD3;
+            newproc->prev = HEAD3;
+            printf("\nAdding initial proc to HEAD3 PID: %d",HEAD3->next->pid);
+        }else{
+            HEAD3->next->prev = newproc;
+            newproc->next = HEAD3->next;
+            HEAD3->next = newproc;
+            newproc->prev = HEAD3;
+            printf("\nAdding more proc to HEAD3, PID: %d",HEAD3->next->pid);
+        }
+
+        //DELETING FROM HEAD2
+        least->prev->next = least->next;
+        least->next->prev = least->prev;
+        free(least);
+
+        //Reset temp and least
+        temp = HEAD2->next;
+        least = HEAD2->next;
+    }
+
+    temp = NULL;
+    least = NULL;
+
+    displayFCFS(HEAD3);
 }
 
 int main(){
@@ -150,7 +208,7 @@ int main(){
             break;
 
             case 3:
-                displayPriority(HEAD,n);
+                
             break;
         }
 
