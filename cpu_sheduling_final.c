@@ -103,7 +103,7 @@ void displaySJN(proc* HEAD){
     proc* newproc;
 
     while(HEAD2->next != HEAD2){
-        printf("\nInside While Loop in displaySJN()");
+
         while(temp->pid > 0){
             if(temp->burst < least->burst){
                 least = temp;
@@ -121,13 +121,13 @@ void displaySJN(proc* HEAD){
             HEAD3->prev = newproc;
             newproc->next = HEAD3;
             newproc->prev = HEAD3;
-            printf("\nAdding initial proc to HEAD3 PID: %d",HEAD3->next->pid);
+            
         }else{
             HEAD3->next->prev = newproc;
             newproc->next = HEAD3->next;
             HEAD3->next = newproc;
             newproc->prev = HEAD3;
-            printf("\nAdding more proc to HEAD3, PID: %d",HEAD3->next->pid);
+            
         }
 
         //DELETING FROM HEAD2
@@ -159,7 +159,7 @@ void displayPriority(proc* HEAD){
     proc* newproc;
 
     while(HEAD2->next != HEAD2){
-        printf("\nInside While Loop in displaySJN()");
+        
         while(temp->pid > 0){
             if(temp->priority < least->priority){
                 least = temp;
@@ -177,13 +177,13 @@ void displayPriority(proc* HEAD){
             HEAD3->prev = newproc;
             newproc->next = HEAD3;
             newproc->prev = HEAD3;
-            printf("\nAdding initial proc to HEAD3 PID: %d",HEAD3->next->pid);
+            
         }else{
             HEAD3->next->prev = newproc;
             newproc->next = HEAD3->next;
             HEAD3->next = newproc;
             newproc->prev = HEAD3;
-            printf("\nAdding more proc to HEAD3, PID: %d",HEAD3->next->pid);
+            
         }
 
         //DELETING FROM HEAD2
@@ -205,7 +205,6 @@ void displayPriority(proc* HEAD){
 void displayRR(proc* oHEAD){
 
     proc* HEAD = duplicateList(oHEAD);
-    printf("\nPID HERE %d %d %d %d %d",HEAD->next->pid,HEAD->next->next->pid,HEAD->next->next->next->pid,HEAD->next->next->next->next->pid,HEAD->next->next->next->next->next->pid);
 
     int timeslice;
     printf("\nEnter timeslice: ");
@@ -221,7 +220,7 @@ void displayRR(proc* oHEAD){
             
             if(temp->start < 0){
                 temp->start = t_cur;
-                printf("\nStarting PID%d at time %d with remaining time %d",temp->pid,temp->start,temp->remaining);
+                
             }
 
             if(temp->remaining == 0){
@@ -231,29 +230,26 @@ void displayRR(proc* oHEAD){
 
             if(temp->remaining > timeslice){
                 temp->remaining = temp->remaining - timeslice;
-                printf("\nGT remaining %d",temp->remaining);
                 t_cur = t_cur + timeslice;
+
             }else if(temp->remaining == timeslice){
                 temp->remaining = 0;
                 t_cur = t_cur + timeslice;
                 temp->turnaround = t_cur - temp->start;
                 temp->waiting = temp->turnaround - temp->burst;
-                printf("\nEQ remaining %d",temp->remaining);
+
             }else if(temp->remaining < timeslice){
                 t_cur = t_cur + timeslice - temp->remaining;
                 temp->remaining = 0;
                 temp->turnaround = t_cur - temp->start;
                 temp->waiting = temp->turnaround - temp->burst;
-                printf("\nLT waiting %d, turnaround %d",temp->waiting,temp->turnaround);
-                printf("\nLT remaining %d",temp->remaining);
+                
             }
 
             t_rem += temp->remaining;
-            printf("\nRemaining Time: %d,  Current Time: %d",t_rem,t_cur);
             temp = temp->next;
         }
         temp = HEAD->next;
-        printf("\nTotal Remaining = %d",t_rem);
     }while(t_rem > 0);
 
     //PRINTING
@@ -328,7 +324,7 @@ int main(){
     int retry;
     do{
         int choice;
-        printf("\nScheduling Types: \n1. FCFS\n2. Shortest Job Next\n3. Priority Scheduling\n4. Round Robin\nEnter choice: ");
+        printf("\nScheduling Types: \n1. FCFS\n2. Shortest Job Next\n3. Priority Scheduling\n4. Round Robin\n5. Exit\nEnter choice: ");
         scanf("%d",&choice);
         switch(choice){
             case 1:
@@ -345,6 +341,14 @@ int main(){
 
             case 4:
                 displayRR(HEAD);
+            break;
+
+            case 5:
+                return 0;
+            break;
+
+            default:
+                printf("\nInvalid option");
             break;
         }
 
