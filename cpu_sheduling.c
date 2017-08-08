@@ -50,50 +50,21 @@ void displayFCFS(proc* HEAD){
 }
 
 void displayPriority(proc* HEAD, int n){
-    proc* temp;
-    if(HEAD->next==NULL){
-        printf("No processes to display");
-    }
-    else{
-        temp = HEAD->prev;
-        printf("\nProcesses to be executed: \n");
-        printf("PID        Burst       Priority        WaitingTime          TurnaroundTime\n");
-        int wait = 0;
-        int burst = 0;
-
-        proc* least;
-        proc* largest;
-        
-        int init = 1;
-        int last = 0;
-        int last_id = -1;
-        for(int i = 0;i<n;i++){
-            least = temp;
-            temp = temp->prev;
-
-            while(temp->pid>0){
-                if(init && temp->priority > least->priority)
-                    largest = temp;
-
-                if(temp->priority<least->priority && temp->priority>=last && temp->pid!=last_id){
-                    least=temp;
-                }
-            temp = temp->prev;
-            }
-            init = 0;
-
-            printf("%d          %d           %d                %d                   %d\n",least->pid,least->burst,least->priority,wait,least->burst);
-            wait += least->burst;
-            
-            last = least->priority;
-            last_id = least->pid;
-            temp = largest;
-        }
-    }      
 }
 
 void displaySJN(proc* HEAD){
     
+}
+
+proc* duplicateList(proc* HEAD){
+    proc* temp = HEAD->next;
+    proc* newproc;
+
+    proc* HEAD2 = malloc(sizeof(proc));
+
+    while(temp->pid > 0){
+        
+    }
 }
 
 int main(){
