@@ -61,9 +61,25 @@ proc* duplicateList(proc* HEAD){
     proc* newproc;
 
     proc* HEAD2 = malloc(sizeof(proc));
+    HEAD2->next = NULL;
+    HEAD2->prev = NULL;
+    HEAD2->pid = -1;
 
     while(temp->pid > 0){
-        
+
+        newproc = malloc(sizeof(proc));
+        newproc->pid = temp->pid;
+        newproc->burst = temp->burst;
+        newproc->priority = temp->priority;
+        newproc->waiting = temp->waiting;
+        newproc->turnaround = temp->turnaround;
+
+        if(HEAD2->next == NULL){
+            HEAD2->next = newproc;
+            HEAD2->prev = newproc;
+            newproc->next = HEAD2;
+            newproc->prev = HEAD2;
+        }
     }
 }
 
