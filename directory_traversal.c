@@ -16,7 +16,7 @@ typedef struct node1{
     struct node1* next_sibling;
 } node;
 
-typedef struct path{
+typedef struct path{ //Stack for search function which returns filepath
     char name[25];
     struct path* next;
 } path;
@@ -48,8 +48,6 @@ void createNode(char name[], int* listTop, node* list[], int selected,int isFile
     newnode->id = *listTop+1;
     newnode->isFile = isFile;
     strcpy(newnode->name,name);
-
-    
     newnode->children_HEAD = NULL;
     newnode->next_sibling = NULL;
     newnode->parent = list[selected];
@@ -73,13 +71,15 @@ void createNode(char name[], int* listTop, node* list[], int selected,int isFile
 }
 
 int main(){
-    int retry = 0;
-    node* list[MAX];
-    int listTop = 0;
+    int retry = 0; //flag to rerun the menu
+    node* list[MAX]; //Array which stores references to all nodes
+    int listTop = 0; //stores index/id of last node created
 
-    for(int i = 0;i<MAX;i++)
+    for(int i = 0;i<MAX;i++) //initialising reference list to null
         list[i] = NULL;
     
+
+    //initialising root node, and list
     node* root = (node*)malloc(sizeof(node));
     root->id = 0;
     strcpy(root->name,"root");
@@ -90,13 +90,11 @@ int main(){
     list[0] = root;
     listTop = 0;
 
-    system("clear");
-    printf("Folders - [_id_]\nFiles   - {=id=}\n\n");
     
     int choice;
 
     do{
-        system("clear");
+        system("clear"); //executes "clear" on bash terminal
 
         int selected;
         int found = 0;
@@ -171,7 +169,7 @@ int main(){
                         if(!strcmp(list[i]->name,filename)){
                             found = 1;
                             printf("\nFile found at: ");
-                            
+                            //Creating path stack
                             path* path_HEAD = malloc(sizeof(path));
                             path_HEAD->next = malloc(sizeof(path));
                             strcpy(path_HEAD->next->name,filename);
@@ -183,7 +181,7 @@ int main(){
                                 path_HEAD->next= newpath;
                                 temp = temp->parent;
                             }
-
+                            //Printing path stack
                             path* tempp = path_HEAD;
                             while(tempp != NULL){
                                 if(tempp->next == NULL)
